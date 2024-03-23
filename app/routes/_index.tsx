@@ -1,5 +1,5 @@
 import type { LoaderFunctionArgs, MetaFunction } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, useLoaderData } from "@remix-run/react";
 import { userCookie } from "~/auth";
 
 export const meta: MetaFunction = () => {
@@ -25,18 +25,14 @@ export default function Index() {
       <h1>Welcome to Remix</h1>
       <nav>
         {
-          userId ? (<div>Logout</div>) : (<div>Login</div>)
+          userId ? (<form action="/logout" method="post">
+            <button type="submit">Logout</button>
+          </form>) : (<div>Login</div>)
         }
       </nav>
       <ul>
         <li>
-          <a
-            target="_blank"
-            href="https://remix.run/tutorials/blog"
-            rel="noreferrer"
-          >
-            15m Quickstart Blog Tutorial
-          </a>
+          <Link to={"/signup"}>Sign Up</Link>
         </li>
       </ul>
     </div>
