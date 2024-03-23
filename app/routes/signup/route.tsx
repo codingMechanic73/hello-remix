@@ -1,25 +1,16 @@
 import { ActionFunctionArgs, json } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
+import { validateCredentials } from "./validation";
 
 export async function action({request}: ActionFunctionArgs) {
     const formData = await request.formData();
-    const email = formData.get("email");
-    const password = formData.get("password");
+    const email =  String(formData.get("email"));
+    const password = String(formData.get("password"));
     
-    const errors: {email?: string, password? : string} = {};
-    if(!email) {
-      errors.email = "Email is required";
-    } else if(!email.toString().includes("@")) {
-      errors.email = "Invalid Email";
-    }
-
-    if(!password) {
-      errors.password = "Enter password";
-    } else if (password.toString().length < 8) {
-      errors.password = "Weak password";
-    }
-
-    return json({ errors }, { status: 401 });
+    const errors = validateCredentials(email, password);
+    return json({errors}, {
+      status: 401
+    })
 }
 
 export default function SignUp() {
