@@ -1,14 +1,15 @@
 import { type ActionFunctionArgs, json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
 import { validateCredentials } from "./validation";
-import { createAccount, userCookie } from "~/auth";
+import { userCookie } from "~/auth";
+import { createAccount } from "./queries";
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData();
   const email = String(formData.get("email"));
   const password = String(formData.get("password"));
 
-  const errors = validateCredentials(email, password);
+  const errors = await validateCredentials(email, password);
   if (errors) {
     return json({ errors }, {
       status: 401
